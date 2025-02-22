@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moview - Movie Details</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo-container">
+                <img src="assets/logo.png" alt="Moview Logo" class="logo">
+                <h1>Moview</h1>
+            </div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="watchlist.html">Watchlist</a></li>
+                <li><a href="profile.html">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="movie-details" id="movie-details">
+            <!-- Movie details will be dynamically loaded here -->
+        </section>
+
+        <section class="chart-section">
+            <h2>Sentiment Analysis</h2>
+            <canvas id="review-chart" style="width: 100%; height: 400px;"></canvas>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Moview. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/movie.js"></script>
+</body>
+</html>
