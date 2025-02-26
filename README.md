@@ -32,7 +32,7 @@ List your team members along with their roles.
 - *Member 3* - Arjun S          24ucs111
 - *Member 4* - Yasheeka E T     24uit162
 - *Member 5* - Swasthika S      24uit155
-- 
+- *Member 3* - Ashwin P M       24ucs114
 
 ![Team Photo](media/team-photo.jpeg)
 
@@ -42,9 +42,9 @@ List your team members along with their roles.
 
 List the technologies and tools used in the project. For example:
 
-- Frontend: HTML, CSS, ReactJS
-- Backend: Django
-- Database: postgres
+- Frontend: HTML, CSS, javascript
+- Backend: Flaask
+- Database: My SQL
 - Other Tools:nltk for sentinmental analysis
 
 ---
