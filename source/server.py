@@ -11,13 +11,13 @@ db = SQLAlchemy(app)  # Initialize the database
 
 
 @app.route('/')
-def home():
-    return render_template("movie.html")
-
-
-@app.route('/index')
 def index():
     return render_template("index.html")
+
+
+@app.route('/movie')
+def home():
+    return render_template("movie.html")
 
 
 @app.route('/profile')
