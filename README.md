@@ -43,7 +43,7 @@ List your team members along with their roles.
 List the technologies and tools used in the project. For example:
 
 - Frontend: HTML, CSS, javascript
-- Backend: Flaask
+- Backend: Flask
 - Database: My SQL
 - Other Tools:nltk for sentinmental analysis
 
