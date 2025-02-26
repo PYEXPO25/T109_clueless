@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
@@ -12,7 +12,22 @@ db = SQLAlchemy(app)  # Initialize the database
 
 @app.route('/')
 def home():
-    return "Welcome to Moview Backend!"
+    return render_template("movie.html")
+
+
+@app.route('/index')
+def index():
+    return render_template("index.html")
+
+
+@app.route('/profile')
+def profile():
+    return render_template("profile.html")
+
+
+@app.route('/watchlist')
+def movie():
+    return render_template("watchlist.html")
 
 
 @app.route('/movies', methods=['GET'])
