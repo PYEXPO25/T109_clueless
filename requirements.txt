@@ -1,0 +1,9 @@
+flask
+nltk
+transformers
+pandas
+textblob
+transformers
+Flask-SQLAlchemy
+flask-cors
+imdby
