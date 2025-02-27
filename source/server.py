@@ -2,7 +2,6 @@ import os
 import requests
 from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
 from dotenv import load_dotenv
 
 # Load API keys from .env
@@ -12,7 +11,6 @@ OMDB_API_KEY = os.getenv("OMDB_API_KEY")
 
 # Initialize Flask App
 app = Flask(__name__)
-CORS(app)  
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)  
@@ -34,20 +32,25 @@ def watchlist():
     return render_template("watchlist.html")
 
 # Fetch Movies from TMDb API
+@app.route('/fetch_movies/<movie_title>', methods=['GET'])
 def fetch_from_tmdb(movie_title):
     url = f"https://api.themoviedb.org/3/search/movie?api_key={TMDB_API_KEY}&query={movie_title}"
     response = requests.get(url)
     data = response.json()
 
-    if data["results"]:
-        movie = data["results"][0]
-        return {
-            "title": movie["title"],
-            "year": movie.get("release_date", "N/A").split("-")[0],
-            "rating": movie.get("vote_average", "N/A"),
-            "poster": f"https://image.tmdb.org/t/p/w500{movie['poster_path']}" if "poster_path" in movie else None
-        }
-    return None
+    if "results" in data and len(data["results"]) > 0:
+        # Filter results to find an exact match by title
+        for movie in data["results"]:
+            if movie["title"].lower() == movie_title.lower():
+                return jsonify({
+                    "title": movie["title"],
+                    "year": movie.get("release_date", "N/A").split("-")[0],
+                    "rating": movie.get("vote_average", "N/A"),
+                    "poster": f"https://image.tmdb.org/t/p/w500{movie['poster_path']}" if "poster_path" in movie else None
+                }), 200
+
+    return jsonify({"error": "Movie not found"}), 404
+
 
 # Fetch Ratings from OMDb API (Includes IMDb & Rotten Tomatoes)
 def fetch_from_omdb(movie_title):

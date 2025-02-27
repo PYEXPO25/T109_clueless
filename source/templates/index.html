@@ -25,11 +25,12 @@
         <section class="banner">
             <h2>Discover Unbiased Movie Reviews</h2>
             <p>Powered by AI sentiment analysis and personalized recommendations.</p>
-            <input type="text" id="search-bar" placeholder="Search for a movie...">
+            <input type="text" id="search-bar" placeholder="Search for a movie..." onkeyup="searchMovies()">
+            <button onclick="fetchMovie()">Search</button>
         </section>
 
         <section class="controls">
-            <select id="sort-options">
+            <select id="sort-options" onchange="sortMovies()">
                 <option value="rating-desc">Sort by Rating: High to Low</option>
                 <option value="rating-asc">Sort by Rating: Low to High</option>
             </select>
@@ -44,6 +45,70 @@
         <p>© 2025 Moview. All rights reserved.</p>
     </footer>
 
-    <script src="js/main.js"></script>
+
+    <script>
+        let movies = [];
+
+        // Function to fetch movies from Flask API
+        function fetchMovies() {
+            const searchInput = document.getElementById("search-bar").value.trim();
+            if (!searchInput) {
+                alert("Please enter a movie name!");
+                return;
+            }
+
+            fetch(`http://127.0.0.1:5000/fetch_movies/${encodeURIComponent(searchInput)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById("movie-list").innerHTML = "<p>No movie found.</p>";
+                    } else if (data.results && data.results.length > 0) {
+                        movies = data.results; // Store multiple movies
+                        displayMovies();
+                    } else {
+                        document.getElementById("movie-list").innerHTML = "<p>No movies found.</p>";
+                    }
+                })
+                .catch(error => console.error("Error fetching movies:", error));
+        }
+
+        // Function to display all fetched movies
+        function displayMovies() {
+            const movieList = document.getElementById("movie-list");
+            movieList.innerHTML = ""; // Clear previous content
+
+            movies.forEach(movie => {
+                const movieCard = document.createElement("div");
+                movieCard.className = "movie-card";
+                movieCard.innerHTML = `
+                    <img src="${movie.poster_path ? 'https://image.tmdb.org/t/p/w500' + movie.poster_path : 'static/placeholder.jpg'}" alt="${movie.title}">
+                    <h3>${movie.title}</h3>
+                    <p><strong>Year:</strong> ${movie.release_date ? movie.release_date.split("-")[0] : "N/A"}</p>
+                    <p><strong>IMDb Rating:</strong> ${movie.vote_average || "N/A"}</p>
+                `;
+                movieList.appendChild(movieCard);
+            });
+        }
+
+        // Function to sort movies
+        function sortMovies() {
+            const sortOption = document.getElementById("sort-options").value;
+            movies.sort((a, b) => {
+                if (sortOption === "rating-desc") {
+                    return b.vote_average - a.vote_average;
+                } else {
+                    return a.vote_average - b.vote_average;
+                }
+            });
+            displayMovies();
+        }
+
+        // Function to handle Enter key press
+        function handleEnter(event) {
+            if (event.key === "Enter") {
+                fetchMovies();
+            }
+        }
+    </script>
 </body>
 </html>

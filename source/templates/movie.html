@@ -1,42 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moview - Movie Details</title>
-    <link rel="stylesheet" href="{{url_for('static',filename='css/styles.css')}}">
-</head>
-<body>
-    <header>
-        <nav>
-            <div class="logo-container">
-                <img src="static/mvlogo.png" alt="Moview Logo" width="90" height="70" class="logo">
-                <h1>Moview</h1>
-            </div>
-            <ul>
-                <li><a href="index">Home</a></li>
-                <li><a href="watchlist">Watchlist</a></li>
-                <li><a href="profile">Profile</a></li>
-            </ul>
-        </nav>
-    </header>
+document.addEventListener("DOMContentLoaded", function () {
+    // Get movie ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const movieId = urlParams.get("id");
 
-    <main>
-        <section class="movie-details" id="movie-details">
-            <!-- Movie details will be dynamically loaded here -->
-        </section>
+    if (movieId) {
+        fetch(`http://127.0.0.1:5000/movies/${movieId}`)
+            .then(response => response.json())
+            .then(movie => {
+                document.getElementById("movie-details").innerHTML = `
+                    <img src="${movie.poster_url}" alt="${movie.title}">
+                    <h2>${movie.title}</h2>
+                    <p><strong>Year:</strong> ${movie.year}</p>
+                    <p><strong>IMDb:</strong> ${movie.imdb_rating}</p>
+                    <p><strong>Rotten Tomatoes:</strong> ${movie.rotten_tomatoes}</p>
+                    <p><strong>Metacritic:</strong> ${movie.metacritic}</p>
+                    <button onclick="goBack()">Back</button>
+                `;
+            })
+            .catch(error => console.error("Error fetching movie details:", error));
+    }
+});
 
-        <section class="chart-section">
-            <h2>Sentiment Analysis</h2>
-            <canvas id="review-chart" style="width: 100%; height: 400px;"></canvas>
-        </section>
-    </main>
-
-    <footer>
-        <p>© 2025 Moview. All rights reserved.</p>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="js/movie.js"></script>
-</body>
-</html>
+// Go back to the previous page
+function goBack() {
+    window.history.back();
+}
